@@ -1,0 +1,33 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Mar  4 15:17:45 2019
+
+@author: martha
+"""
+import pygame as pg, sys
+from pygame.locals import *
+
+pg.init()
+
+screen = pg.display.set_mode((540,540))
+
+def peredit():
+    screen.fill((255,255,255))
+    for i in range (0,8):
+        for j in range(0,8):
+            pg.draw.rect(screen,[100,10,255],[i*80,j*80,60,60])
+           
+    pg.draw.circle(screen,[255,10,100],[270,30],30,0)
+    pg.draw.circle(screen,[255,10,100],[270,510],30,0)
+    pg.display.update()
+peredit()
+
+while(1):
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+            pg.quit()
+            sys.exit()
+            
+    pg.display.update()
+pg.quit()

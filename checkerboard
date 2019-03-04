@@ -1,10 +1,12 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
+
 """
 Created on Mon Mar  4 15:17:45 2019
 
 @author: martha
 """
+
 import pygame as pg, sys
 from pygame.locals import *
 
@@ -18,11 +20,32 @@ def peredit():
         for j in range(0,8):
             pg.draw.rect(screen,[100,10,255],[i*80,j*80,60,60])
            
-    pg.draw.circle(screen,[255,10,100],[270,30],30,0)
-    pg.draw.circle(screen,[255,10,100],[270,510],30,0)
+    pg.draw.circle(screen,[255,100,100],[270,30],30,0)
+    pg.draw.circle(screen,[255,255,100],[270,510],30,0)
     pg.display.update()
 peredit()
 
+
+class chese:
+    def __init__(self,owner,x,y):
+        self.owner = owner
+        self.x = x
+        self.y = y
+        
+    def changeOwner(self):
+        self.owner = bool(1-self.owner)
+        
+    def move_chese(self,dleta_x,dleta_y):
+        self.x = self.x + dleta_x * 60
+        self.y = self.y + dleta_y * 60
+    
+    def pr(self):
+        print(self.owner,self.x,self.y)
+
+
+Mychese = chese(True,270,30)
+Enemychese = chese(False,270,510)
+        
 while(1):
     for event in pg.event.get():
         if event.type == pg.QUIT:

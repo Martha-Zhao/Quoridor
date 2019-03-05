@@ -27,24 +27,32 @@ peredit()
 
 
 class chese:
-    def __init__(self,owner,x,y):
+    def __init__(self,owner,x,y): #Iinital init
         self.owner = owner
         self.x = x
         self.y = y
-        
-    def changeOwner(self):
-        self.owner = bool(1-self.owner)
-        
-    def move_chese(self,dleta_x,dleta_y):
-        self.x = self.x + dleta_x * 60
-        self.y = self.y + dleta_y * 60
-    
-    def pr(self):
+        if self.owner:
+            self.__color = [255,100,100]
+        else:
+            self.__color = [255,255,100]
+            
+    def move(self,x,y):
+        pg.draw.circle(screen,[100,10,255],[self.x,self.y],30,0)
+        self.x = self.x + x * 80
+        self.y = self.y + y * 80
+        pg.draw.circle(screen,self.__color,[self.x,self.y],30,0)
+        pg.display.update()
+    def pr(self): #print function
         print(self.owner,self.x,self.y)
 
 
-Mychese = chese(True,270,30)
-Enemychese = chese(False,270,510)
+Mychese = chese(bool(1),270,30)
+Enemychese = chese(bool(0),270,510)
+
+Mychese.move(1,1)
+Enemychese.move(-1,-1)
+
+#print(Mychese.pr())
         
 while(1):
     for event in pg.event.get():

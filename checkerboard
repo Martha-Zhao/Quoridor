@@ -22,6 +22,7 @@ def peredit():
            
     pg.draw.circle(screen,[255,100,100],[270,30],30,0)
     pg.draw.circle(screen,[255,255,100],[270,510],30,0)
+    
     pg.display.update()
 peredit()
 
@@ -44,6 +45,28 @@ class chese:
         pg.display.update()
     def pr(self): #print function
         print(self.owner,self.x,self.y)
+        
+class block:
+    def __init__(self,owner):
+        self.owner = owner#blocks'owner
+        self.count = 10 #owner's bloks remain number  origin = 10
+        if owner:
+            self.__color = [255,100,100]
+        else:
+            self.__color = [255,255,100]
+        
+    def palce(self,mode,x,y): #1 vertical 0 horizon
+        self.count = self.count - 1
+        if mode:  #vertical
+            self.x = 60 + (x - 1) * 80
+            self.y = y * 80
+            pg.draw.rect(screen,self.__color,[self.x,self.y,20,140])
+        else:
+            self.x = x * 80
+            self.y = 60 + (y - 1) * 80
+            pg.draw.rect(screen,self.__color,[self.x,self.y,140,20])
+        pg.display.update()
+            
 
 
 Mychese = chese(bool(1),270,30)
@@ -52,7 +75,17 @@ Enemychese = chese(bool(0),270,510)
 Mychese.move(1,1)
 Enemychese.move(-1,-1)
 
-#print(Mychese.pr())
+print(Mychese.pr())
+        
+        
+        
+Myblocks = block(bool(1))
+Enemyblocks = block(bool(0))
+
+Myblocks.palce(0,4,4)
+print(Myblocks.count)
+Enemyblocks.palce(1,4,4)
+print(Enemyblocks.count)
         
 while(1):
     for event in pg.event.get():

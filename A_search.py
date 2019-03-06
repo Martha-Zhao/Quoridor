@@ -71,8 +71,6 @@ def searchPath():
             D.append(myPiece.location)
             myPiece = Piece(S[len(S) - 1])
 
-
-
 if __name__ == "__main__":
 #     myPiece = Piece((origin))  
     searchPath()       

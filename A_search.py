@@ -47,13 +47,12 @@ def searchPath():
 #     print(myPiece)
     global searchCount
     global myPiece
-    if end in S:
-        return 0   #print
-    else:
+    while(end not in S):
 #         searchCount = searchCount + 1
         searchCount = 0
         distance = 0x3f3f3f
         if myPiece.neighbor != []:
+            searchCount = len(myPiece.neighbor)
             for i in myPiece.neighbor:
                 sonPiece = Piece(i)
                 S.append(i)
@@ -70,7 +69,9 @@ def searchPath():
             C.remove(myPiece.location)
             D.append(myPiece.location)
             myPiece = Piece(S[len(S) - 1])
+            C.append(myPiece.location)
 
 if __name__ == "__main__":
 #     myPiece = Piece((origin))  
-    searchPath()       
+    searchPath()    
+    print(C)   

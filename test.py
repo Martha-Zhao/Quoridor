@@ -1,42 +1,41 @@
 # from cheseBoard.preBoard import *
-import cheseBoard.ASearchFinal
-from cheseBoard.gVariables import CreateBoard, Piece,origin,end
-
+from findRoute.ASearchFinal import *
+from findRoute.gVariables import CreateBoard
+origin = (0,3)
+end = (6,3)
+"""
+initialization piece and board
+"""
 myPiece = Piece(origin)# initialization my piece 
 myBoard = CreateBoard(origin,end) # initialization my board
-myBoard.placeBlock(1, 2, 3) 
-myBoard.placeBlock(0, 3, 3)  
-myBoard.placeBlock(1, 2, 2)
 
-cheseBoard.ASearchFinal.searchPath(myPiece,myBoard)
-print(myBoard.C) #print result 
+myBoard.movePiece(origin, (1,5))
+myBoard.movePiece(end, (3,1))
+myPiece.location = (1,5)
+print(myBoard.board)
 
 """
-GUI
+place block
 """
-# while(1):
-#     textInit()
-#     for event in pg.event.get():
-#         if event.type == pg.QUIT:
-#             pg.quit()
-#             sys.exit()
-#         if event.type == pg.KEYDOWN:
-#             if event.key == K_DOWN:
-#                 Mychese.move(0,1)
-#             elif event.key == K_UP:
-#                 Mychese.move(0,-1)
-#             elif event.key == K_LEFT:
-#                 Mychese.move(-1,0)
-#             elif event.key == K_RIGHT:
-#                 Mychese.move(1,0)
-#                 
-#             elif event.key == K_s:
-#                 Enemychese.move(0,1)
-#             elif event.key == K_w:
-#                 Enemychese.move(0,-1)
-#             elif event.key == K_a:
-#                 Enemychese.move(-1,0)
-#             elif event.key == K_d:
-#                 Enemychese.move(1,0)
-#     pg.display.update()
-# pg.quit()
+myBoard.placeBlock(1, 2, 5) 
+myBoard.placeBlock(0, 1, 4)  
+myBoard.placeBlock(0, 3, 5)
+
+"""
+search path test
+"""
+# searchPath(myPiece,myBoard)
+# print(myBoard.C) #print result 
+
+"""
+possible piece location  test
+"""
+# result = possibleMoves(myPiece, myBoard)
+# print(result)
+
+"""
+possible blocks location test
+"""
+result = possibleBlockLocation(myPiece, myBoard)
+print(result)
+

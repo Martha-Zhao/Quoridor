@@ -1,6 +1,4 @@
 import numpy as np
-origin = (0,3)#original location of my pieces
-end  = (6,3)   #target location of my pieces 
 
 """
 create board (center,right,down) 
@@ -9,7 +7,7 @@ right down ---- -1: with block 1: no block
 """   
 # myPiece = cheseBoard.test.myPiece
 # myBoard = cheseBoard.test.myBoard
-
+end = 6
 class CreateBoard():
     def __init__(self,origin,end):
         a = np.array([0,1,1]) 
@@ -19,6 +17,11 @@ class CreateBoard():
         A = np.hstack((A,A,A,A,A,A,B)) 
  
         self.board = A  
+        
+        self.board[origin[0],origin[1] * 3] = 1
+        self.board[end[0],end[1] * 3] = 1
+        self.blocksList = []
+        
         self.S = [origin] # occupied
         self.C = [origin] #root decided
         self.D = [] #no root available
@@ -39,6 +42,18 @@ class CreateBoard():
         else:
             self.board[x,y * 3 + 2] = -1
             self.board[x,y * 3 + 5] = -1
+        self.blocksList.append((mode,x,y))   
+    """
+    (x0,y0) origin location
+    mode:
+    1: up   2: down   3: left   4: right
+    """                           
+    def movePiece(self,originalLocation,targetLocation):
+        self.board[originalLocation[0],originalLocation[1] * 3] = 0
+        self.board[targetLocation[0],targetLocation[1] * 3] = 1 
+        
+    def returnDistance(self):
+        return (len(self.C))
     
 """
 class Piece:
@@ -57,8 +72,8 @@ class Piece:
         
     def calculateDistance(self,testBoard):
         x = self.location[0]
-        y = self.location[1] #test variable
-        return (end[0] - x + len(testBoard.C))
+#         y = self.location[1] #test variable
+        return (end - x + len(testBoard.C))
         
     def findNeighbor(self,testBoard):
         x = self.location[0]

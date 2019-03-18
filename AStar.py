@@ -6,6 +6,25 @@ Created on 2019年3月17日
 
 from findRoute.gVariables import Point
 
+def possibleBlockLocation(location,testBoard):
+    moveList = []
+    x = location[0]
+    y = location[1]
+    searchList = [(-2,0),(-1,0),(0,0),(1,0),
+                  (-2,-1),(-1,-1),(0,-1),(1,-1),
+                  (-2,-2),(-1,-2),(0,-2),(1,-2),
+                  (-2,1),(-1,1),(0,1),(1,1),
+                  (-2,2),(-1,2),(0,2),(1,2)]
+    for i in searchList:
+        if y + i[1] < 0 or y + i[1] > 5 or x + i[0] < 0 or x + i[0] > 5 or (0,x + i[0],y + i[1]) in testBoard.blocksList or (1,x + i[0],y + i[1]) in testBoard.blocksList:
+            pass
+        else:
+            if testBoard.board[x + i[0] ,(y + i[1]) * 3 + 1] == 1 and testBoard.board[x + i[0] + 1 ,(y + i[1]) * 3 + 1] == 1:
+                moveList.append((1,x + i[0],y + i[1]))
+            if testBoard.board[x + i[0] ,(y + i[1]) * 3 + 2] == 1 and testBoard.board[x + i[0],(y + i[1] + 1) * 3 + 2] == 1:
+                moveList.append((0,x + i[0],y + i[1]))
+    return moveList 
+  
 def findNeighbor(location,testBoard):
     x = location[0]
     y = location[1]

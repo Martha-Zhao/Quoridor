@@ -19,23 +19,34 @@ class Board():
         A = np.hstack((A,A,A,A,A,A,B)) 
         self.board = A 
         self.board[myPieceLocation[0],myPieceLocation[1] * 3] = 1
-        self.board[enemysPieceLocation[1],enemysPieceLocation[1] * 3] = 1
+        self.board[enemysPieceLocation[0],enemysPieceLocation[1] * 3] = 1
         self.openList = []
         self.closeList = []
-        self.blocksList = []    
+        self.blocksList = []   
+        self.myPieceLocation = myPieceLocation
+        self.enemysPieceLocation = enemysPieceLocation 
+        self.myBlockNum = 10
+        self.enemysBlockNum = 10
              
     """
     mode = 1 vertical mode = 2 horizon
     (x,y) center of block
     """    
-    def placeBlock(self,mode,x,y): 
-        if mode == 1:     
-            self.board[x,y * 3 + 1] = -1
-            self.board[x + 1,y * 3 + 1] = -1
+    def placeBlock(self,owner,mode,x,y): 
+        if (not owner) and self.myBlockNum <= 0: #owner = 0 my turn 
+            print('My blocks has run out! ')
+            raise Exception("place Blocks Exception")
+        elif owner and self.enemysBlockNum <=0:
+            print('Enemy"s blocks has run out! ')
+            raise Exception("place Blocks Exception")
         else:
-            self.board[x,y * 3 + 2] = -1
-            self.board[x,y * 3 + 5] = -1
-        self.blocksList.append((mode,x,y))   
+            if mode == 1:     
+                self.board[x,y * 3 + 1] = -1
+                self.board[x + 1,y * 3 + 1] = -1
+            else:
+                self.board[x,y * 3 + 2] = -1
+                self.board[x,y * 3 + 5] = -1
+            self.blocksList.append((mode,x,y))   
     """
     (x0,y0) origin location
     mode:
@@ -43,8 +54,28 @@ class Board():
     """                           
     def movePiece(self,oldLocation,newLocation):
         self.board[oldLocation[0],oldLocation[1] * 3] = 0
-        self.board[newLocation[0],newLocation[1] * 3] = 1  
-
+        self.board[newLocation[0],newLocation[1] * 3] = 1
+        if oldLocation == self.myPieceLocation:
+            self.myPieceLocation = newLocation
+            print('move my piece from'+repr(oldLocation)+' to '+repr(newLocation))
+        elif oldLocation == self.enemysPieceLocation:
+            self.enemysPieceLocation = newLocation
+            print('move enemy"s piece from'+repr(oldLocation)+' to '+repr(newLocation))
+#         else:
+#             print('Wrong Move!,no piece in ',oldLocation)
+#             raise Exception("movePiece Exception")
+          
+    def isGameOver(self):
+        if self.myPieceLocation[0] == 6:
+            print("AI win!") 
+            return 1
+        elif self.enemysPieceLocation[0] == 0:
+            print("Player win!")
+            return 1
+        else:
+            return 0
+            
+            
 """
 class Point:
 location: location of  piece

@@ -28,21 +28,7 @@ def possibleBlockLocation(location,testBoard):
 def findNeighbor(location,testBoard):
     x = location[0]
     y = location[1]
-    neighbor = []
-    """
-    up
-    """
-    if x > 0 and testBoard.board[x - 1,y * 3] == 1:  #piece upon
-        if x > 1 and testBoard.board[x - 2,y * 3 + 2] == -1: # block upon upon 
-            if y > 0 and testBoard.board[x - 1,y * 3 - 2] == 1:  #up left
-                neighbor.append((x - 1,y - 1))
-            if testBoard.board[x - 1,y * 3 + 1] == 1: #up right
-                neighbor.append((x - 1,y + 1))
-        elif x > 1:
-            neighbor.append((x - 2,y)) #up up
-    elif x > 0 and testBoard.board[x - 1,y * 3 + 2] == 1: 
-        neighbor.append((x - 1,y))# up
-        
+    neighbor = []   
     """
     down
     """
@@ -83,7 +69,21 @@ def findNeighbor(location,testBoard):
             neighbor.append((x,y + 2)) #right right 
     elif y < 6 and testBoard.board[x,y * 3 + 1] == 1:
         neighbor.append((x, y + 1)) # right
-
+        
+    """
+    up
+    """
+    if x > 0 and testBoard.board[x - 1,y * 3] == 1:  #piece upon
+        if x > 1 and testBoard.board[x - 2,y * 3 + 2] == -1: # block upon upon 
+            if y > 0 and testBoard.board[x - 1,y * 3 - 2] == 1:  #up left
+                neighbor.append((x - 1,y - 1))
+            if testBoard.board[x - 1,y * 3 + 1] == 1: #up right
+                neighbor.append((x - 1,y + 1))
+        elif x > 1:
+            neighbor.append((x - 2,y)) #up up
+    elif x > 0 and testBoard.board[x - 1,y * 3 + 2] == 1: 
+        neighbor.append((x - 1,y))# up
+     
     return neighbor
           
 def AStar(owner,origin,testBoard):
@@ -132,6 +132,12 @@ def AStar(owner,origin,testBoard):
                 testBoard.closeList.remove(i)
                 break
     print(result)
+    return len(result) #return distance
 #         tempPoint = testBoard.closeList[testBoard.closeList.index(tempPoint.fatherPoint)]
 
-    
+def evaluationFunc(testBoard):
+    myStep = AStar(0, testBoard.myPieceLocation, testBoard)
+    print('my step is ',myStep)
+    enemyStep = AStar(1, testBoard.enemysPieceLocation, testBoard)
+    print('enemy"s step is ',enemyStep)
+    return enemyStep - myStep

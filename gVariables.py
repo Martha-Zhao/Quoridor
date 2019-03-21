@@ -46,25 +46,53 @@ class Board():
             else:
                 self.board[x,y * 3 + 2] = -1
                 self.board[x,y * 3 + 5] = -1
-            self.blocksList.append((mode,x,y))   
+            self.blocksList.append((mode,x,y))
+            if not owner:
+                self.myBlockNum -= 1
+            else:
+                self.enemysBlockNum -= 1
+#             print(repr(owner) + " place an block in " + repr((mode,x,y)))
+            
+    def removeBlock(self,owner,mode,x,y):
+        if mode == 1:     
+            self.board[x,y * 3 + 1] = 1
+            self.board[x + 1,y * 3 + 1] = 1
+        else:
+            self.board[x,y * 3 + 2] = 1
+            self.board[x,y * 3 + 5] = 1
+        if not owner:
+            self.myBlockNum += 1
+        else:
+            self.enemysBlockNum += 1
+        self.blocksList.remove((mode,x,y))
+#         print(repr(owner) + ' remove an block on '+ repr((mode,x,y)))
+        
+       
     """
     (x0,y0) origin location
     mode:
     1: up   2: down   3: left   4: right
     """                           
-    def movePiece(self,oldLocation,newLocation):
+    def movePiece(self,owner,oldLocation,newLocation):
         self.board[oldLocation[0],oldLocation[1] * 3] = 0
         self.board[newLocation[0],newLocation[1] * 3] = 1
-        if oldLocation == self.myPieceLocation:
+        if not owner:
             self.myPieceLocation = newLocation
-            print('move my piece from'+repr(oldLocation)+' to '+repr(newLocation))
-        elif oldLocation == self.enemysPieceLocation:
+#             print('move my piece from'+repr(oldLocation)+' to '+repr(newLocation))
+        else:
             self.enemysPieceLocation = newLocation
-            print('move enemy"s piece from'+repr(oldLocation)+' to '+repr(newLocation))
+#             print('move enemy"s piece from'+repr(oldLocation)+' to '+repr(newLocation))
 #         else:
 #             print('Wrong Move!,no piece in ',oldLocation)
 #             raise Exception("movePiece Exception")
-          
+    def delPiece(self,oldLocation):
+        self.board[oldLocation[0],oldLocation[1] * 3] = 0
+#         print ('remove piece located in ',oldLocation)
+    def setPiece (self,newLocation):
+        self.board[newLocation[0],newLocation[1] * 3] = 1
+#         print ('set piece located in ',newLocation)   
+        
+        
     def isGameOver(self):
         if self.myPieceLocation[0] == 6:
             print("AI win!") 

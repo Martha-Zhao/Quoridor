@@ -6,6 +6,7 @@ Created on Mar 20, 2019
 @author: Martha Zhao
 @tudo: test if it is possible that depart Minimal function and Maximal function  
 '''
+from findRoute.gVariables import Board
 from findRoute.AStar import findNeighbor,possibleBlockLocation,evaluationFunc
 result = None
 choice = None
@@ -33,10 +34,13 @@ def maxFunc(depth,tempBoard,alpha,beta): #Even node
         moveList = possibleMove(0, tempBoard)
         for i in moveList:
             if len(i) == 2: #move piece
-                tempBoard.movePiece(myLocation,i)
+                tempBoard.movePiece(0,myLocation,i)
+                val = minFunc(depth - 1,tempBoard,alpha,beta)
+                tempBoard.movePiece(0,i,myLocation)
             else:
                 tempBoard.placeBlock(0,i[0],i[1],i[2])
-            val = minFunc(depth - 1,tempBoard,alpha,beta)
+                val = minFunc(depth - 1,tempBoard,alpha,beta)
+                tempBoard.removeBlock(0,i[0],i[1],i[2])
             if val > alpha:
                 alpha = val
                 result = val
@@ -55,10 +59,13 @@ def minFunc(depth,tempBoard,alpha,beta):
         moveList = possibleMove(1, tempBoard)
         for i in moveList:
             if len(i) == 2: #move piece
-                tempBoard.movePiece(enemysLocation,i)
+                tempBoard.movePiece(1,enemysLocation,i)
+                val = maxFunc(depth - 1,tempBoard,alpha,beta)
+                tempBoard.movePiece(1,i,enemysLocation)
             else:
                 tempBoard.placeBlock(1,i[0],i[1],i[2])
-            val = minFunc(depth - 1,tempBoard,alpha,beta)
+                val = maxFunc(depth - 1,tempBoard,alpha,beta)
+                tempBoard.removeBlock(1,i[0],i[1],i[2])
             if val < beta:
                 beta = val
                 result = val
@@ -70,15 +77,17 @@ def minFunc(depth,tempBoard,alpha,beta):
 def possibleMove(owner,tempBoard):
     myPieceLocation = tempBoard.myPieceLocation
     enemysPieceLocation = tempBoard.enemysPieceLocation
-    if owner:
-        movePieceList = findNeighbor(myPieceLocation, tempBoard) 
-        moveBlockList = possibleBlockLocation(enemysPieceLocation, tempBoard)
-    else:
+    if owner:   #owner = 1 Enemy's choice
         movePieceList = findNeighbor(enemysPieceLocation, tempBoard) 
         moveBlockList = possibleBlockLocation(myPieceLocation, tempBoard)
+    else:  #owner = 0 My choice
+        movePieceList = findNeighbor(myPieceLocation, tempBoard) 
+        moveBlockList = possibleBlockLocation(enemysPieceLocation, tempBoard)
     moveList = movePieceList + moveBlockList
     return moveList  
     
 if __name__ == '__main__':
-    
-    pass
+    board = Board((0,3),(6,3))
+    print(board.board)
+    res = maxFunc(2, board, -0x3f3f3f, 0x3f3f3f)
+    print('choice is ' + repr(choice) + ' res is '+ repr(res))

@@ -136,7 +136,7 @@ def AStar(owner,origin,testBoard):
                 tempPoint = i
                 testBoard.closeList.remove(i)
                 break
-    print(result)
+#     print(result)
     testBoard.openList = []
     testBoard.closeList = []
     return len(result) - 1 #return distance

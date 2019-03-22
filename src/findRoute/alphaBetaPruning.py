@@ -31,33 +31,34 @@ def maxFunc(depth,tempBoard,alpha,beta): #Even node
     global choice
     myLocation = tempBoard.myPieceLocation
 #     enemysLocation = tempBoard.enemysPieceLocation
-    if depth <= 0 or tempBoard.isGameOver():
+    if depth <= 0 or tempBoard.isGameOver(): #find end node ,calculate and return distance
         distance = evaluationFunc(tempBoard)
         return distance
     else:
-        moveList = possibleMove(0, tempBoard)
+        moveList = possibleMove(0, tempBoard) #find possible moves
         for i in moveList:
             if len(i) == 2: #move piece
                 tempBoard.movePiece(0,myLocation,i)
                 val = minFunc(depth - 1,tempBoard,alpha,beta)
-                tempBoard.movePiece(0,i,myLocation)
-            else:
+                tempBoard.movePiece(0,i,myLocation) #reset board
+            else: #place block
                 tempBoard.placeBlock(0,i[0],i[1],i[2])
                 val = minFunc(depth - 1,tempBoard,alpha,beta)
-                tempBoard.removeBlock(0,i[0],i[1],i[2])
-            if val > alpha:
+                tempBoard.removeBlock(0,i[0],i[1],i[2]) #reset board
+            if val > alpha: #if has better option change change and result
                 alpha = val
                 result = val
                 choice = i
-            if alpha >= beta:
+            if alpha >= beta: #if no better option available end search
                 break
-        return alpha
+        return alpha 
                 
-def minFunc(depth,tempBoard,alpha,beta):
+def minFunc(depth,tempBoard,alpha,beta): #Odd node
     global choice
 #     myLocation = tempBoard.myPieceLocation
-    enemysLocation = tempBoard.enemysPieceLocation
-    if depth <= 0 or tempBoard.isGameOver():
+    enemysLocation = tempBoard.enemysPieceLocation 
+    #find end node ,calculate and return distance
+    if depth <= 0 or tempBoard.isGameOver(): 
         distance = evaluationFunc(tempBoard)
         return distance
     else:

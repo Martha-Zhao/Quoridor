@@ -6,9 +6,22 @@ Created on 2019年3月17日
 import numpy as np
 
 """
-create board (center,right,down) 
-center:0 location available 
-right down ---- -1: with block 1: no block
+class Board initialization board 
+initialization with my piece's location and enemy's piece's location
+if  board(x,y * 3) == 1: have piece in (x,y)
+    board(x,y * 3) == 0: no piece in (x,y)
+openList: A* searched location (possible moves)
+closeList: A* defined location (identified moves)
+blocksList: already placed blocks location
+            (mode,x,y) mode: 0--horizon 1--vertical
+                      (x,y): center of block 
+myPieceLocation: location of my piece
+enemysPieceLocation: location of enemy's piece
+myBlockNum: number of my blocks in hands (10-used)
+enemysBlockNum: number of enemy's blocks in hands (10 - used)
+            length(blocksList) = myUsed + enemy'sUsed
+
+
 """   
 class Board():
     def __init__(self,myPieceLocation,enemysPieceLocation):
@@ -29,7 +42,11 @@ class Board():
         self.enemysBlockNum = 10
              
     """
-    mode = 1 vertical mode = 2 horizon
+    place an block in (mode,x,y)
+    owner's block number -1
+    blocks list append (mode,x,y)
+    owner: 0: my block;    1: enemy's block
+    mode : 1: vertical;    2: horizon
     (x,y) center of block
     """    
     def placeBlock(self,owner,mode,x,y): 
@@ -52,7 +69,12 @@ class Board():
             else:
                 self.enemysBlockNum -= 1
 #             print(repr(owner) + " place an block in " + repr((mode,x,y)))
-            
+    """
+    remove block (owner,mode,x,y)
+    remove block (mode,x,y)
+    owner's block number + 1
+    blocksList remove (mode,x,y)
+    """        
     def removeBlock(self,owner,mode,x,y):
         if mode == 1:     
             self.board[x,y * 3 + 1] = 1
@@ -66,33 +88,45 @@ class Board():
             self.enemysBlockNum += 1
         self.blocksList.remove((mode,x,y))
 #         print(repr(owner) + ' remove an block on '+ repr((mode,x,y)))
-        
+
        
     """
-    (x0,y0) origin location
-    mode:
-    1: up   2: down   3: left   4: right
+    move piece (owner,oldLocation,newLocation)
+    set piece in new location
+    remove owner's piece in old location
+    renew owner's piece's location with new location
     """                           
     def movePiece(self,owner,oldLocation,newLocation):
         self.board[oldLocation[0],oldLocation[1] * 3] = 0
         self.board[newLocation[0],newLocation[1] * 3] = 1
         if not owner:
             self.myPieceLocation = newLocation
-#             print('move my piece from'+repr(oldLocation)+' to '+repr(newLocation))
         else:
             self.enemysPieceLocation = newLocation
-#             print('move enemy"s piece from'+repr(oldLocation)+' to '+repr(newLocation))
-#         else:
-#             print('Wrong Move!,no piece in ',oldLocation)
-#             raise Exception("movePiece Exception")
+
+    """
+    delete piece in old location
+    uses in restore board
+    """
     def delPiece(self,oldLocation):
         self.board[oldLocation[0],oldLocation[1] * 3] = 0
 #         print ('remove piece located in ',oldLocation)
+
+    """
+    set piece in new location
+    used in restore board
+    """
     def setPiece (self,newLocation):
         self.board[newLocation[0],newLocation[1] * 3] = 1
 #         print ('set piece located in ',newLocation)   
         
-        
+    """
+    define whether game is over
+    if my piece location column 6 return 1
+    if enemy's piece location column 0 return 0
+    else:
+    return 0
+    """   
     def isGameOver(self):
         if self.myPieceLocation[0] == 6:
             print("AI win!") 
@@ -108,20 +142,21 @@ class Board():
 class Point:
 location: location of  piece
 owner: 0---my piece   1---enemy's piece
+"""
+class Piece():
+    def __init__(self,owner,location):
+        self.location = location
+        self.owner = owner
+            
+"""
+class point
 neighbor:left right up down with no blocks remove:location occupied and with blocks
 f: real step up to now and vertical distance end[0] - location[0]
 g: real step up to now
 h: estimate distance to destination
 f = g + h
 destination: column to go to
-function: findNeighbor find all neighbors not occupied and remove blocked
-p.s. search from end to begin to avoid index jump 
-"""
-class Piece():
-    def __init__(self,owner,location):
-        self.location = location
-        self.owner = owner    
-        
+"""        
 class Point():
     def __init__(self,owner,location):
         self.location = location

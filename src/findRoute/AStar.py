@@ -5,6 +5,10 @@ Created on 2019年3月17日
 '''
 
 from findRoute.gVariables import Point
+"""
+find possible blocks location
+NEED CHANGE searcList
+"""
 
 def possibleBlockLocation(location,testBoard):
     moveList = []
@@ -24,7 +28,11 @@ def possibleBlockLocation(location,testBoard):
             if testBoard.board[x + i[0] ,(y + i[1]) * 3 + 2] == 1 and testBoard.board[x + i[0],(y + i[1] + 1) * 3 + 2] == 1:
                 moveList.append((0,x + i[0],y + i[1]))
     return moveList 
-  
+"""
+fidnNeighbor 
+NEED CHANGE SEARCH PATH DEPEND ON OWNER
+RELIST neighbor
+"""
 def findNeighbor(location,testBoard):
     x = location[0]
     y = location[1]
@@ -85,14 +93,14 @@ def findNeighbor(location,testBoard):
                 neighbor.append((x - 1,y + 1))
                 
     return neighbor
-          
+      
+"""
+AStar search 
+return steps from now location to destination
+"""    
 def AStar(owner,origin,testBoard):
     temp = 1
-#     searchPiece = Piece(owner,origin) #initialization start piece
-#     fatherPiece = searchPiece
-#     testBoard.closeList.append(fatherPiece) #add start point to open list
-    searchPoint = Point(owner,origin)
-#     searchPoint.fatherPoint = searchPoint
+    searchPoint = Point(owner,origin) 
     testBoard.closeList.append(searchPoint)
     while temp:
         sonPointInOpenlistFlag = 0
@@ -106,7 +114,7 @@ def AStar(owner,origin,testBoard):
             
             if sonPoint.location[0] == searchPoint.destination:
                 temp = 0
-#                 break
+                break
             for searchRepeat in testBoard.openList:
                 if sonPoint.location == searchRepeat.location:
                     sonPointInOpenlistFlag = 1
@@ -117,8 +125,7 @@ def AStar(owner,origin,testBoard):
                     break
             if not sonPointInOpenlistFlag:
                 testBoard.openList.append(sonPoint)
-                
- 
+
         minimalSearch = 0x3f3f3f3f
         for tempPoint in testBoard.openList:
             if tempPoint.f <= minimalSearch:
@@ -128,7 +135,7 @@ def AStar(owner,origin,testBoard):
         testBoard.closeList.append(searchPoint) 
         tempPoint = testBoard.closeList[-1]  
         result = [tempPoint.location] 
-#         testBoard.movePiece(searchPoint.location,result)
+
     while not (tempPoint.location == origin):
         result.append(tempPoint.fatherPoint)
         for i in reversed(testBoard.closeList):
@@ -136,12 +143,15 @@ def AStar(owner,origin,testBoard):
                 tempPoint = i
                 testBoard.closeList.remove(i)
                 break
-#     print(result)
+
     testBoard.openList = []
     testBoard.closeList = []
     return len(result) - 1 #return distance
-#         tempPoint = testBoard.closeList[testBoard.closeList.index(tempPoint.fatherPoint)]
 
+"""
+function IN
+return enemy's step - my step 
+"""
 def evaluationFunc(testBoard):
     testBoard.delPiece(testBoard.myPieceLocation)
     myStep = AStar(0, testBoard.myPieceLocation, testBoard)

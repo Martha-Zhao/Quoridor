@@ -14,11 +14,14 @@ def possibleBlockLocation(location,testBoard):
     moveList = []
     x = location[0]
     y = location[1]
-    searchList = [(-2,0),(-1,0),(0,0),(1,0),
-                  (-2,-1),(-1,-1),(0,-1),(1,-1),
-                  (-2,-2),(-1,-2),(0,-2),(1,-2),
-                  (-2,1),(-1,1),(0,1),(1,1),
-                  (-2,2),(-1,2),(0,2),(1,2)]
+#     searchList = [(-2,0),(-1,0),(0,0),(1,0),
+#                   (-2,-1),(-1,-1),(0,-1),(1,-1),
+#                   (-2,-2),(-1,-2),(0,-2),(1,-2),
+#                   (-2,1),(-1,1),(0,1),(1,1),
+#                   (-2,2),(-1,2),(0,2),(1,2)]
+    searchList = [(-1,1),(0,1),(1,1),
+                  (-1,0),(0,0),(1,0),
+                  (-1,-1),(0,-1,(1,-1))]
     for i in searchList:
         if y + i[1] < 0 or y + i[1] > 5 or x + i[0] < 0 or x + i[0] > 5 or (0,x + i[0],y + i[1]) in testBoard.blocksList or (1,x + i[0],y + i[1]) in testBoard.blocksList:
             pass
@@ -33,7 +36,7 @@ fidnNeighbor
 NEED CHANGE SEARCH PATH DEPEND ON OWNER
 RELIST neighbor
 """
-def findNeighbor(location,testBoard):
+def findNeighbor(owner,location,testBoard):
     x = location[0]
     y = location[1]
     neighbor = []   
@@ -91,9 +94,11 @@ def findNeighbor(location,testBoard):
                 neighbor.append((x - 1,y - 1))
             elif testBoard.board[x - 1,y * 3 + 1] == 1:
                 neighbor.append((x - 1,y + 1))
-                
-    return neighbor
-      
+    if owner:
+        neighbor.sort(reverse=False)   
+    else:
+        neighbor.sort(reverse=True)            
+    return neighbor  
 """
 AStar search 
 return steps from now location to destination
@@ -104,7 +109,7 @@ def AStar(owner,origin,testBoard):
     testBoard.closeList.append(searchPoint)
     while temp:
         sonPointInOpenlistFlag = 0
-        neighbor = findNeighbor(searchPoint.location,testBoard)
+        neighbor = findNeighbor(searchPoint.owner,searchPoint.location,testBoard)
         for i in neighbor:
             sonPointInOpenlistFlag = 0
             sonPoint = Point(owner,i)

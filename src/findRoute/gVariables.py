@@ -103,6 +103,7 @@ class Board():
             self.myPieceLocation = newLocation
         else:
             self.enemysPieceLocation = newLocation
+        
 
     """
     delete piece in old location
@@ -159,6 +160,7 @@ destination: column to go to
 """        
 class Point():
     def __init__(self,owner,location):
+        self.owner = owner
         self.location = location
         self.fatherPoint = None
         if owner:#enemy's piece

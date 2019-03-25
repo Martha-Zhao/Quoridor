@@ -101,7 +101,7 @@ def abS(depth,tempBoard):
     alpha = -0x3f3f3f
     beta = 0x3f3f3f
     if depth%2:
-        res = minFunc(depth, tempBoard, alpha,beta)
+        res = minFunc(depth, tempBoard, alpha, beta)
     else:
         res = maxFunc(depth, tempBoard, alpha, beta)
     print('alphaBeta pruning result = ',res)

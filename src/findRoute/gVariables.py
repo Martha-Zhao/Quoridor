@@ -96,14 +96,15 @@ class Board():
     remove owner's piece in old location
     renew owner's piece's location with new location
     """                           
-    def movePiece(self,owner,oldLocation,newLocation):
+    def movePiece(self,owner,newLocation):
+        if not owner:
+            oldLocation = self.myPieceLocation
+            self.myPieceLocation = newLocation 
+        else:
+            oldLocation = self.enemysPieceLocation
+            self.enemysPieceLocation = newLocation
         self.board[oldLocation[0],oldLocation[1] * 3] = 0
         self.board[newLocation[0],newLocation[1] * 3] = 1
-        if not owner:
-            self.myPieceLocation = newLocation
-        else:
-            self.enemysPieceLocation = newLocation
-        
 
     """
     delete piece in old location

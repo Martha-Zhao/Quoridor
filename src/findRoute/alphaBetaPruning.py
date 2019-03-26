@@ -38,9 +38,9 @@ def maxFunc(depth,tempBoard,alpha,beta): #Even node
         moveList = possibleMove(0, tempBoard) #find possible moves
         for i in moveList:
             if len(i) == 2: #move piece
-                tempBoard.movePiece(0,myLocation,i)
+                tempBoard.movePiece(0,i)
                 val = minFunc(depth - 1,tempBoard,alpha,beta)
-                tempBoard.movePiece(0,i,myLocation) #reset board
+                tempBoard.movePiece(0,myLocation) #reset board
             else: #place block
                 tempBoard.placeBlock(0,i[0],i[1],i[2])
                 val = minFunc(depth - 1,tempBoard,alpha,beta)
@@ -65,9 +65,9 @@ def minFunc(depth,tempBoard,alpha,beta): #Odd node
         moveList = possibleMove(1, tempBoard)
         for i in moveList:
             if len(i) == 2: #move piece
-                tempBoard.movePiece(1,enemysLocation,i)
+                tempBoard.movePiece(1,i)
                 val = maxFunc(depth - 1,tempBoard,alpha,beta)
-                tempBoard.movePiece(1,i,enemysLocation)
+                tempBoard.movePiece(1,enemysLocation)
             else:
                 tempBoard.placeBlock(1,i[0],i[1],i[2])
                 val = maxFunc(depth - 1,tempBoard,alpha,beta)
@@ -84,10 +84,10 @@ def possibleMove(owner,tempBoard):
     myPieceLocation = tempBoard.myPieceLocation
     enemysPieceLocation = tempBoard.enemysPieceLocation
     if owner:   #owner = 1 Enemy's choice
-        movePieceList = findNeighbor(enemysPieceLocation, tempBoard) 
+        movePieceList = findNeighbor(1,enemysPieceLocation, tempBoard) 
         moveBlockList = possibleBlockLocation(myPieceLocation, tempBoard)
     else:  #owner = 0 My choice
-        movePieceList = findNeighbor(myPieceLocation, tempBoard) 
+        movePieceList = findNeighbor(0,myPieceLocation, tempBoard) 
         moveBlockList = possibleBlockLocation(enemysPieceLocation, tempBoard)
     moveList = movePieceList + moveBlockList
 #     moveList = movePieceList

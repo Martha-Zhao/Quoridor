@@ -1,96 +1,54 @@
 '''
-Created on 2019年3月22日
+Created on 2019年3月27日
 
 @author: Martha Zhao
-@todo: all the test available
 '''
+from math import sqrt, log
+from random import choice
+import psutil
+import os
 
-# from cheseBoard.preBoard import 
-from findRoute.AStar import findNeighbor,possibleBlockLocation,AStar
-from findRoute.gVariables import Board,Piece
-from findRoute.alphaBetaPruning import abS
-from pip._vendor.distlib.compat import raw_input
+class Node():
+    def __init__(self, w, v, parent):
+        self._w = w
+        self._v = v
+        self.parent = parent
+        self._childNodes = []
+
+    def UCTSelectChild(self):
+        """ Use the UCB1 formula to select a child node.
+            Often a constant UCTK is applied so we have
+            lambda c: c.wins/c.visits + UCTK * sqrt(2*log(self.visits)/c.visits
+            to vary the amount of
+            exploration versus exploitation.
+        """
+        s = sorted(self._childNodes,
+                   key=lambda c: c._w/c._v +
+                   sqrt(2*log(self._v)/c._v),
+                   reverse=True)
+#         for it in s:
+#             str_ = 's-w = ' + str(it._w) + ' s_v = ' + str(it._v)
+#             print(str_)
+        str_ = 's-w = ' + str(s[0]._w) + ' s_v = ' + str(s[0]._v)
+        print(str_)
+        return s[0]
+
+    def add_child(self, child):
+        self._childNodes.append(child)
+
 
 if __name__ == '__main__':
-    origin = (0,3)
-    end = (6,3)
-    """
-    initialization piece and board
-    """
-    myPiece = Piece(0,(0,3))# initialization my piece 
-    enemysPiece = Piece(1,(6,3))
-    myBoard = Board(origin,end) # initialization my board
+
+    a = [1, 2, 3, 4, 5]
+    b = choice(a)
+    print(b)
     
-#     myBoard.movePiece(0, (1,3))
-#     myBoard.movePiece(1, (5,3))
-#     print("origin board is ")
-#     print(myBoard.board)
-    
-    """
-    place block
-    """
-#     myBoard.placeBlock(0, 1, 5, 4) 
-    myBoard.placeBlock(1, 0, 1, 3)  
-    myBoard.placeBlock(1, 1, 1, 4) 
-#     myBoard.placeBlock(0, 3, 5)
-     
-    """
-    possible piece location test
-    """
-#     print(myBoard.board)
-#     res = findNeighbor(0,myBoard.myPieceLocation,myBoard)
-#     print("find neighbor test result is ") #print result
-#     print(res) 
-     
-    """
-    possible blocks location test
-    """
-#     res = possibleBlockLocation(myPiece.location, myBoard)
-#     print("possible block location test result is ")
-#     print(res)
-    
-    """
-    A* search test
-    """
-#     res = AStar(0,myBoard.myPieceLocation,myBoard)
-#     print ("A* test result is ")
-#     print (res)
-    
-    """
-    alpha beta pruning test
-    """
-#     res = abS(2, myBoard)
-#     print ("alpha beta pruning test result is")
-#     print(res)
-    """
-    system in test
-    """
-#     sysInPut = raw_input("enemy's action is :")
-#     sysInPut = str.split(',')
-#     enemyMove = [int(sysInPut[i]) for i in range(len(sysInPut)) ]
-#     print (enemyMove)
-           
-#     print()
-    """
-    play test
-    """
-    while(not myBoard.isGameOver()):
-#        my step
-        res = abS(2, myBoard)
-        print ("alpha beta pruning test result is",res)
-        if len(res) == 2:
-            myBoard.movePiece(0, res)
-        else:
-            myBoard.placeBlock(0, res[0], res[1], res[2])
-#        enemy's step
-        enemyStepInString = raw_input("Please input enemy's step : ")
-        enemyStepInList = enemyStepInString.split(',')
-        enemyStepList = [int(enemyStepInList[i]) for i in range(len(enemyStepInList))]
-        print ("Enemy's step is :",enemyStepList)
-        if len(enemyStepList) == 2:
-            myBoard.movePiece(1, enemyStepList)
-        else:
-            myBoard.placeBlock(1, enemyStepList[0], enemyStepList[1], enemyStepList[2])
-             
-          
-        
+    a = None
+    if a is not None:
+        print ('not None')
+    else:
+        print ('None')
+    info = psutil.virtual_memory()
+    print('内存使用：', psutil.Process(os.getpid()).memory_info().rss)
+    print('总内存：',info.total)
+    print('内存占比：',info.percent)
